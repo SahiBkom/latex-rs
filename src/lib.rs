@@ -112,11 +112,13 @@ mod lists;
 mod paragraph;
 mod section;
 mod visitor;
+mod subsection;
 
 pub use document::{Document, DocumentClass, Element, Preamble, PreambleElement};
 pub use equations::{Align, Equation};
 pub use lists::{Item, List, ListKind};
 pub use paragraph::{Paragraph, ParagraphElement};
 pub use section::Section;
+pub use subsection::SubSection;
 
 pub use visitor::{print, Visitor};

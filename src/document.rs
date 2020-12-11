@@ -6,6 +6,7 @@ use equations::Align;
 use lists::List;
 use paragraph::Paragraph;
 use section::Section;
+use subsection::SubSection;
 
 /// The root Document node.
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -82,6 +83,8 @@ pub enum Element {
     Para(Paragraph),
     /// A section.
     Section(Section),
+    /// A section.
+    SubSection(SubSection),
     /// The table of contents.
     TableOfContents,
     /// The title page.
@@ -139,6 +142,12 @@ impl From<Align> for Element {
 impl From<Section> for Element {
     fn from(other: Section) -> Self {
         Element::Section(other)
+    }
+}
+
+impl From<SubSection> for Element {
+    fn from(other: SubSection) -> Self {
+        Element::SubSection(other)
     }
 }
 

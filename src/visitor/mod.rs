@@ -11,6 +11,7 @@ use lists::{Item, List};
 use paragraph::{Paragraph, ParagraphElement};
 use section::Section;
 use std::ops::Deref;
+use subsection::SubSection;
 
 /// A trait which uses the [Visitor Pattern] to recursively visit each node in
 /// a `Document`.
@@ -88,6 +89,15 @@ pub trait Visitor {
 
     /// Visit a `Section` and then recursively visit each of its `Element`s.
     fn visit_section(&mut self, section: &Section) -> Result<(), Error> {
+        for elem in section.iter() {
+            self.visit_element(elem)?;
+        }
+
+        Ok(())
+    }
+
+    /// Visit a `Section` and then recursively visit each of its `Element`s.
+    fn visit_subsection(&mut self, section: &SubSection) -> Result<(), Error> {
         for elem in section.iter() {
             self.visit_element(elem)?;
         }

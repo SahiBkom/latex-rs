@@ -7,6 +7,7 @@ use failure::Error;
 use lists::{Item, List};
 use paragraph::{Paragraph, ParagraphElement};
 use section::Section;
+use subsection::SubSection;
 
 /// Print a document to a string.
 pub fn print(doc: &Document) -> Result<String, Error> {
@@ -150,6 +151,7 @@ where
         match *element {
             Element::Para(ref p) => self.visit_paragraph(p)?,
             Element::Section(ref s) => self.visit_section(s)?,
+            Element::SubSection(ref s) => self.visit_subsection(s)?,
             Element::TableOfContents => writeln!(self.writer, r"\tableofcontents")?,
             Element::TitlePage => writeln!(self.writer, r"\maketitle")?,
             Element::ClearPage => writeln!(self.writer, r"\clearpage")?,
@@ -174,6 +176,24 @@ where
 
     fn visit_section(&mut self, section: &Section) -> Result<(), Error> {
         writeln!(self.writer, r"\section{{{}}}", section.name)?;
+
+        if !section.is_empty() {
+            // Make sure there's space between the \section{...} and the next line
+            writeln!(self.writer)?;
+        }
+
+        for element in section.iter() {
+            self.visit_element(element)?;
+            // LaTeX needs an empty line between paragraphs/elements otherwise
+            // it'll automatically concatenate them together
+            writeln!(self.writer)?;
+        }
+
+        Ok(())
+    }
+
+    fn visit_subsection(&mut self, section: &SubSection) -> Result<(), Error> {
+        writeln!(self.writer, r"\subsection{{{}}}", section.name)?;
 
         if !section.is_empty() {
             // Make sure there's space between the \section{...} and the next line
